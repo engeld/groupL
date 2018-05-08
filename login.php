@@ -13,6 +13,7 @@ if(isset($_SESSION['user'])){
   $logged = true;
 }
 
+//thats a fucking test
 if(!$logged){
   if(isset($_POST['user'])){
     $user = ($_POST['user']);
