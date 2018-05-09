@@ -8,7 +8,6 @@ if(!isset($_SESSION['user'])){
   exit();
 }
 
-
 include('pdo.inc.php');
 
 try {

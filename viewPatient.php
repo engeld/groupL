@@ -1,30 +1,29 @@
 <?php
 session_start();
 
-// First, we test if user is logged. If not, goto main.php (login page).
+// First, we test if user is logged. If not, goto login.php (login page).
 if(!isset($_SESSION['user'])){
-  header("Location: main.php");
-  //echo "problem with user";
+  header("Location: login.php");
   exit();
 }
 
-
 include('pdo.inc.php');
+$dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
 
 try {
-    $dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
     $patientID=0;
 
     if(isset($_GET['id'])){
       $patientID = (int)($_GET['id']);
     }
+
     if($patientID >0){
       $statement0 = $dbh->prepare("SELECT name, first_name FROM patient WHERE patient.patientID = :patientID");
       $statement0->bindParam(':patientID', $patientID, PDO::PARAM_INT);
       $result0 = $statement0->execute();
 
       while($line = $statement0->fetch()){
-        echo "<h1> Patient : ".$line['first_name']."  ".$line['name']."</h1>";
+        echo "<h1>Patient: ".$line['first_name']."  ".$line['name']."</h1>";
         echo "<br>\n";
       }
 

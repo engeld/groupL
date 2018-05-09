@@ -16,6 +16,7 @@ echo "<link rel='stylesheet' type='text/css' href='css/style.css'>\n";
 echo "<script type='text/javascript' src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js'></script>\n";
 echo "<script type='text/javascript' src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js'></script>\n";
 echo "<script type='text/javascript' src='https://code.jquery.com/jquery-3.3.1.min.js'></script>\n";
+echo "<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js'></script>\n";
 
 echo "<title>KIS der Gruppe L</title>\n";
 echo "</head>\n";
