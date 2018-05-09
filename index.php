@@ -1,7 +1,11 @@
 <?php
+/**
+ * This page is the login page
+ */
+
 session_start();
-// Initialisation of passwords for the database
-include('pdo.inc.php');
+
+include('pdo.inc.php'); // Initialisation of passwords for the database
 
 // Read the credentials if given as POST parameters
 $user = '';
@@ -9,12 +13,15 @@ $pwd = '';
 $message = '';
 
 $logged= false;
+
+// check if user is already logged in, redirect to main page
 if(isset($_SESSION['user'])){
   $logged = true;
   header("Location: listPatients.php");
   exit();
 }
 
+// if user isn't already logged in, check POST parameters
 if(!$logged){
   if(isset($_POST['user'])){
     $user = ($_POST['user']);
@@ -23,10 +30,10 @@ if(!$logged){
     $pwd = ($_POST['pwd']);
   }
 
-
   try {
     // Connect to the database
     $dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
+
     // if the username is set, test if combination "username/password" is valid
     if($user !=''){
       // Initialise SQL query with place holders (:username and :password)
@@ -62,20 +69,19 @@ if(!$logged){
     }
 }
 
-// the form is only displayed if the person is not logged.
+// the form is only displayed if the person is not logged in.
 if(!$logged){
 ?>
-  <h1>Medizininformatik Data Base: Login page</h1>
+  <h1>Login page</h1>
 
     <form method='POST'>
-<pre>
-    Username: <input type="text" name="user">
-    Password: <input type="password" name="pwd">
-   <input type="submit" value="Login">
-</pre>
-   </form>
+      <pre>
+          Username: <input type="text" name="user">
+          Password: <input type="password" name="pwd">
+         <input type="submit" value="Login">
+      </pre>
+    </form>
 
    <?php
     echo "<b>$message</b>";
-    }
-  ?>
+}?>
