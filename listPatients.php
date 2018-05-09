@@ -12,7 +12,6 @@ if(!isset($_SESSION['user'])){
 
 include('pdo.inc.php');
 echo "<body class='nav'>\n";
-echo "Hallo Dr. ";
 ?>
 
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -39,31 +38,41 @@ echo "Hallo Dr. ";
   </div>
 </nav>
 
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <nav class="navbar navbar-inverse navbar-fixed-side">
+        <!-- normal collapsible navbar markup -->
+        <h3>Patienten</h3>
+         <?php
+            try {
+                $dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
+                $result = $dbh->query("select * from patient");
 
-<?php
-try {
-    $dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
-    /*** echo a message saying we have connected ***/
+                while($line = $result->fetch()){
+                  echo "<a href='viewPatient.php?id=".$line['patientID']."'>";
+                  echo $line['first_name']." ".$line['name'];
+                  echo "</a><br>\n";
+                }
 
-    echo '<h1>List of patients</h1>';
-    $sql = "select * from patient";
-
-    $result = $dbh->query($sql);
-
-    while($line = $result->fetch()){
-      echo "<a href='viewPatient.php?id=".$line['patientID']."'>";
-      echo $line['first_name']." ".$line['name'];
-
-      echo "</a><br>\n";
-    }
-
-    $dbh = null;
-} catch(PDOException $e) {
-    /*** echo the sql statement and error message ***/
-    echo $e->getMessage();
-}
-
-?>
+                $dbh = null;
+            } catch(PDOException $e) {
+                /*** echo the sql statement and error message ***/
+                echo $e->getMessage();
+            }
+            ?>
+      </nav>
+    </div>
+    <div class="col-sm-9 col-lg-10">
+      <!-- your page content -->
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </div>
+  </div>
+</div>
 <br />
 <hr />
-<i><a href="logout.php">Logout</a></i>
