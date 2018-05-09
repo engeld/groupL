@@ -17,6 +17,8 @@ echo "<script type='text/javascript' src='https://stackpath.bootstrapcdn.com/boo
 echo "<script type='text/javascript' src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js'></script>\n";
 echo "<script type='text/javascript' src='https://code.jquery.com/jquery-3.3.1.min.js'></script>\n";
 echo "<script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js'></script>\n";
+echo "<script type='text/javascript' src='https://canvasjs.com/assets/script/jquery.canvasjs.min.js'></script>\n";
+echo "<script defer src='https://use.fontawesome.com/releases/v5.0.12/js/all.js' integrity='sha384-Voup2lBiiyZYkRto2XWqbzxHXwzcm4A5RfdfG6466bu5LqjwwrjXCMBQBLMWh7qR' crossorigin='anonymous'></script>\n";
 
 echo "<title>KIS der Gruppe L</title>\n";
 echo "</head>\n";

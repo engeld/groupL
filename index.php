@@ -82,43 +82,112 @@ echo "<body class='nav'>\n";
           echo "<div id='vital_signs'>";
           echo "<h3>Vital Signs</h3>";
           echo "<hr />";
-          echo "<div class='card-columns'>";
+          echo "<div class='card-decks'>";
           $all_sign_names = $dbh->query("SELECT signID, sign_name FROM sign")->fetchAll();
+
           foreach ($all_sign_names as $key => $value) {
             $signID = $value['signID']; ?>
+            <div class="row">
+              <div class="col-6">
+                <div class="card">
+                  <div class="card-header p-1">
+                    <nav class="navbar">
+                      <span class="mr-auto">
+                        <h4><?php echo $value['sign_name'] ?></h4>
+                      </span>
+                      <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal">
+                        Wert hinzufügen <i class="fas fa-plus-circle"></i> 
+                      </button>
+                    </nav>
+                  </div>
+                  <div class="card-body">
+                    <table class="table table-striped table-bordered table-sm">
+                      <thead>
+                        <tr>
+                          <th scope="col">Zeit</th>
+                          <th scope="col">Wert</th>
+                          <th scope="col">Notiz</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                        $sql = "SELECT value, time, note FROM vital_sign WHERE vital_sign.patientID = :patientID AND vital_sign.signID = :signID";
+                        $statement1 = $dbh->prepare($sql);
+                        $statement1->bindParam(':patientID', $patientID, PDO::PARAM_INT);
+                        $statement1->bindParam(':signID', $signID, PDO::PARAM_INT);
+                        $vital_values = $statement1->execute();
 
-            <div class="card">
-              <h4 class="card-header"><?php echo $value['sign_name']; ?></h4>
-              <div class="card-body">
-                <table class="table table-striped table-bordered table-sm">
-                  <thead>
-                    <tr>
-                      <th scope="col">Zeit</th>
-                      <th scope="col">Wert</th>
-                      <th scope="col">Notiz</th>
-                    </tr>
-                  </thead>
+                        while($vital_values = $statement1->fetch()) { 
+                          echo "<tr>\n";
+                          echo "<td scope='row'>".$vital_values['time']."</td>\n";
+                          echo "<td>".$vital_values['value']."</td>\n";
+                          echo "<td>".$vital_values['note']."</td>\n";
+                          echo "</tr>\n";
+                        }
+                        ?>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-6">
+                <!--
+                <canvas id="myChart" width="300" height="300"></canvas>
+                <script>
+                  new Chart(document.getElementById("myChart1"),{
+                    "type":"line",
+                    "data":{
+                      "labels":["2014-03-01 08:20:21","2014-03-01 15:20:45","2014-03-01 22:04:51","2014-03-02 08:22:27","2014-03-02 12:32:47"],
+                      "datasets": [{
+                        "label":"Temparature",
+                        "data":[37,37.5,38.2,39,38.2],
+                        "fill":false,
+                        "borderColor":"rgb(244, 66, 66)",
+                        "lineTension":0.1}]
+                      },"options":{}
+                    });
+                </script>
+              -->
+                <div id="chartContainer<?php echo $signID ?>" ></div>
+                <script>
+                window.onload = function () {
 
-                  <tbody>
-                    <?php
-                    $sql = "SELECT value, time, note FROM vital_sign WHERE vital_sign.patientID = :patientID AND vital_sign.signID = :signID";
-                    $statement1 = $dbh->prepare($sql);
-                    $statement1->bindParam(':patientID', $patientID, PDO::PARAM_INT);
-                    $statement1->bindParam(':signID', $signID, PDO::PARAM_INT);
-                    $vital_values = $statement1->execute();
+                var options = {
+                  animationEnabled: true,  
+                  title:{
+                    text: "Temparaturverlauf"
+                  },
+                  axisX: {
+                    valueFormatString: "DD.MM.YY - HH:MM"
+                  },
+                  axisY: {
+                    title: "Temparatur (in Grad Celcius)",
+                    suffix: "°C",
+                    includeZero: false
+                  },
+                  data: [{
+                    yValueFormatString: "##.## °C",
+                    xValueFormatString: "DD.MM.YY - HH:MM",
+                    type: "spline",
+                      
+                    dataPoints: [
+                      { x: new Date("2014-03-01 08:20:21"), y: 37 },
+                      { x: new Date("2014-03-01 15:20:45"), y: 37.5 },
+                      { x: new Date("2014-03-01 22:04:51"), y: 38.2 },
+                      { x: new Date("2014-03-02 08:22:27"), y: 39 },
+                      { x: new Date("2014-03-02 12:32:47"), y: 38.2 },
+                      { x: new Date("2014-03-02 22:04:51"), y: 38 }
+                    ]
+                  }]
+                };
+                $("#chartContainer1").CanvasJSChart(options);
+                $("#chartContainer2").CanvasJSChart(options);
 
-                    while($vital_values = $statement1->fetch()) { 
-                      echo "<tr>\n";
-                      echo "<td scope='row'>".$vital_values['time']."</td>\n";
-                      echo "<td>".$vital_values['value']."</td>\n";
-                      echo "<td>".$vital_values['note']."</td>\n";
-                      echo "</tr>\n";
-                    }
-                    ?>
-                  </tbody>
-                </table>
+                }
+                </script>
               </div>
             </div>
+            
             <br>
           <?php
           }
@@ -163,7 +232,7 @@ echo "<body class='nav'>\n";
             <?php
           echo "</div>";
         } else{
-          echo "<h1>The patient does not exist</h1>";
+          echo "<h1>Please select a patient</h1>";
         }?>
       </div>
     </div>
