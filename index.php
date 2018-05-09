@@ -72,16 +72,17 @@ if(!$logged){
 // the form is only displayed if the person is not logged in.
 if(!$logged){
 ?>
-  <h1>Login page</h1>
-
-    <form method='POST'>
-      <pre>
-          Username: <input type="text" name="user">
-          Password: <input type="password" name="pwd">
-         <input type="submit" value="Login">
-      </pre>
+  <body class="text-center login-form">
+    <form method='POST' class="form-signin">
+      <h1 class="h3 mb-3 font-weight-normal">Login page</h1>
+      <label for="inputUser" class="sr-only">Username</label>
+      <input type="text" name="user" id="inputUser" class="form-control" placeholder="Username" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" name="pwd" id="inputPassword" class="form-control" placeholder="Password" required>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
     </form>
-
    <?php
-    echo "<b>$message</b>";
+    echo "<b>$message</b>\n";
 }?>
+  </body>
+</html>

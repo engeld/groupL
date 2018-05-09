@@ -5,4 +5,4 @@ unset($_SESSION['user']);
 
 ?>
 <h1>Logout done</h1>
-<a href="main.php">Back to login page</a>
+<a href="index.php">Back to login page</a>
