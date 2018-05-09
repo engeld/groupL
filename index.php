@@ -1,88 +1,77 @@
 <?php
 /**
- * This page is the login page
+ * This page is the main application page
+ * 
  */
-
 session_start();
-
-include('pdo.inc.php'); // Initialisation of passwords for the database
-
-// Read the credentials if given as POST parameters
-$user = '';
-$pwd = '';
-$message = '';
-
-$logged= false;
-
-// check if user is already logged in, redirect to main page
-if(isset($_SESSION['user'])){
-  $logged = true;
-  header("Location: listPatients.php");
+// First, we test if user is logged. If not, goto login.php (login page).
+if(!isset($_SESSION['user'])){
+  header("Location: login.php");
   exit();
 }
 
-// if user isn't already logged in, check POST parameters
-if(!$logged){
-  if(isset($_POST['user'])){
-    $user = ($_POST['user']);
-  }
-  if(isset($_POST['pwd'])){
-    $pwd = ($_POST['pwd']);
-  }
+include('pdo.inc.php');
+$dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
 
-  try {
-    // Connect to the database
-    $dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
-
-    // if the username is set, test if combination "username/password" is valid
-    if($user !=''){
-      // Initialise SQL query with place holders (:username and :password)
-      $sql0 = "SELECT staff.staffID, staff.username, first_name, hashed_password
-  FROM staff,credential
-  WHERE staff.staffID = credential.staffID AND staff.username=:username AND hashed_password=sha(:password)";
-      // parse the query and set the parameters for place holders.
-      $statement0 = $dbh->prepare($sql0);
-      $statement0->bindParam(':username', $user, PDO::PARAM_STR);
-      $statement0->bindParam(':password', $pwd, PDO::PARAM_STR);
-      // execute the query
-      $result0 = $statement0->execute();
-      // case if login was a success
-      if($line = $statement0->fetch()){
-	echo "<h1> staff : ".$line['staffID']."  ".$line['username']." ".$line['hashed_password']."</h1>\n";
-	$logged=true;
-	$_SESSION['user']= $line['username'];
-	header("Location: listPatients.php");
-	exit();
-      }
-      else{ // if login failed
-	$message= "Login not possible";
-      }
-
-      $dbh = null;
-    }
-  }
-  catch(PDOException $e)
-    {
-
-      /*** echo the sql statement and error message ***/
-      echo $e->getMessage();
-    }
-}
-
-// the form is only displayed if the person is not logged in.
-if(!$logged){
+echo "<body class='nav'>\n";
 ?>
-  <body class="text-center login-form">
-    <form method='POST' class="form-signin">
-      <h1 class="h3 mb-3 font-weight-normal">Login page</h1>
-      <label for="inputUser" class="sr-only">Username</label>
-      <input type="text" name="user" id="inputUser" class="form-control" placeholder="Username" required autofocus>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" name="pwd" id="inputPassword" class="form-control" placeholder="Password" required>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-    </form>
-   <?php
-    echo "<b>$message</b>\n";
-}?>
-  </body>
-</html>
+
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+  <a class="navbar-brand mb-0 h1" href="#">Klinik Mondschein</a>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="#">Patienten<span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Mitarbeiter</a>
+      </li>
+    </ul>
+
+    <span class="navbar-text p-2 bd-highlight">
+    Dr. <?php echo $_SESSION['user']?>
+    </span>
+    <a href="logout.php" class="btn btn-outline-light">Logout</a>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-3 col-lg-2">
+      <!-- normal collapsible navbar markup -->
+      <h3>Patienten</h3>
+       <?php
+          try {
+              $result = $dbh->query("select * from patient");
+
+              while($line = $result->fetch()){
+                echo "<a href='viewPatient.php?id=".$line['patientID']."'>";
+                echo $line['first_name']." ".$line['name'];
+                echo "</a><br>\n";
+              }
+
+              $dbh = null;
+          } catch(PDOException $e) {
+              /*** echo the sql statement and error message ***/
+              echo $e->getMessage();
+          }
+          ?>
+    </div>
+    <div class="col-sm-9 col-lg-10">
+      <!-- your page content -->
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    </div>
+  </div>
+</div>
+<br />
+<hr />

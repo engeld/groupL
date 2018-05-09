@@ -1,26 +1,19 @@
 <?php
-/**
- * This page is the login page
- */
-
 session_start();
-
-include('pdo.inc.php'); // Initialisation of passwords for the database
+// Initialisation of passwords for the database
+include('pdo.inc.php');
 
 // Read the credentials if given as POST parameters
 $user = '';
 $pwd = '';
-$message = '';
-$logged= false;
 
-// check if user is already logged in, redirect to main page
+
+$logged= false;
 if(isset($_SESSION['user'])){
   $logged = true;
-  header("Location: index.php");
-  exit();
 }
 
-// if user isn't already logged in, check POST parameters
+//thats a fucking test
 if(!$logged){
   if(isset($_POST['user'])){
     $user = ($_POST['user']);
@@ -29,12 +22,12 @@ if(!$logged){
     $pwd = ($_POST['pwd']);
   }
 
+
   try {
     // Connect to the database
     $dbh = new PDO("mysql:host=$hostname;dbname=$dbname", $username, $password);
-
     // if the username is set, test if combination "username/password" is valid
-    if($user !=''){
+    if($username !=''){
       // Initialise SQL query with place holders (:username and :password)
       $sql0 = "SELECT staff.staffID, staff.username, first_name, hashed_password
   FROM staff,credential
@@ -50,11 +43,9 @@ if(!$logged){
 	echo "<h1> staff : ".$line['staffID']."  ".$line['username']." ".$line['hashed_password']."</h1>\n";
 	$logged=true;
 	$_SESSION['user']= $line['username'];
-	header("Location: index.php");
-	exit();
       }
       else{ // if login failed
-	$message= "Login not possible";
+	echo "<h1>Login not possible</h1>";
       }
 
       $dbh = null;
@@ -68,20 +59,21 @@ if(!$logged){
     }
 }
 
-// the form is only displayed if the person is not logged in.
+// the form is only displayed if the person is not logged.
 if(!$logged){
 ?>
-  <body class="text-center login-form">
-    <form method='POST' class="form-signin">
-      <h1 class="h3 mb-3 font-weight-normal">Login page</h1>
-      <label for="inputUser" class="sr-only">Username</label>
-      <input type="text" name="user" id="inputUser" class="form-control" placeholder="Username" required autofocus>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" name="pwd" id="inputPassword" class="form-control" placeholder="Password" required>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
-    </form>
+<form method='POST'>
+   <input type="text" name="user">
+   <input type="password" name="pwd">
+   <input type="submit" value="Login">
+   </form>
+
    <?php
-    echo "<b>$message</b>\n";
-}?>
-  </body>
-</html>
+    }
+else{
+
+  echo "You are loged in:".$_SESSION['user'];
+  echo "<a href='logout.php'>Logout</a>";
+  }
+
+  ?>
