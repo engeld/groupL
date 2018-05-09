@@ -17,7 +17,7 @@ echo "<script type='text/javascript' src='https://stackpath.bootstrapcdn.com/boo
 echo "<script type='text/javascript' src='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js'></script>\n";
 echo "<script type='text/javascript' src='https://code.jquery.com/jquery-3.3.1.min.js'></script>\n";
 
-echo '<title>CHEFFE</title>';
+echo "<title>KIS der Gruppe L</title>\n";
 echo "</head>\n";
-echo "<body>\n";
+//echo "<body>\n";
 ?>
