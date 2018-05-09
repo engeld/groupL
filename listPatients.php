@@ -41,7 +41,6 @@ echo "<body class='nav'>\n";
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-3 col-lg-2">
-      <nav class="navbar navbar-inverse navbar-fixed-side">
         <!-- normal collapsible navbar markup -->
         <h3>Patienten</h3>
          <?php
@@ -61,7 +60,6 @@ echo "<body class='nav'>\n";
                 echo $e->getMessage();
             }
             ?>
-      </nav>
     </div>
     <div class="col-sm-9 col-lg-10">
       <!-- your page content -->
