@@ -82,40 +82,47 @@ echo "<body class='nav'>\n";
           echo "<div id='vital_signs'>";
           echo "<h3>Vital Signs</h3>";
           echo "<hr />";
+          echo "<div class='card-columns'>";
           $all_sign_names = $dbh->query("SELECT signID, sign_name FROM sign")->fetchAll();
           foreach ($all_sign_names as $key => $value) {
-            $signID = $value['signID'];
-            echo "<h4>".$value['sign_name']."</h4>";
-            ?>
-            <table class="table">
-              <thead>
-                <tr>
-                  <th scope="col">Zeit</th>
-                  <th scope="col">Wert</th>
-                  <th scope="col">Notiz</th>
-                </tr>
-              </thead>
+            $signID = $value['signID']; ?>
 
-              <tbody>
-                <?php
-                $sql = "SELECT value, time, note FROM vital_sign WHERE vital_sign.patientID = :patientID AND vital_sign.signID = :signID";
-                $statement1 = $dbh->prepare($sql);
-                $statement1->bindParam(':patientID', $patientID, PDO::PARAM_INT);
-                $statement1->bindParam(':signID', $signID, PDO::PARAM_INT);
-                $vital_values = $statement1->execute();
+            <div class="card">
+              <h4 class="card-header"><?php echo $value['sign_name']; ?></h4>
+              <div class="card-body">
+                <table class="table table-striped table-bordered table-sm">
+                  <thead>
+                    <tr>
+                      <th scope="col">Zeit</th>
+                      <th scope="col">Wert</th>
+                      <th scope="col">Notiz</th>
+                    </tr>
+                  </thead>
 
-                while($vital_values = $statement1->fetch()) { 
-                  echo "<tr>\n";
-                  echo "<td scope='row'>".$vital_values['time']."</td>\n";
-                  echo "<td>".$vital_values['value']."</td>\n";
-                  echo "<td>".$vital_values['note']."</td>\n";
-                  echo "</tr>\n";
-                }
-                ?>
-              </tbody>
-            </table>
-            <?php
+                  <tbody>
+                    <?php
+                    $sql = "SELECT value, time, note FROM vital_sign WHERE vital_sign.patientID = :patientID AND vital_sign.signID = :signID";
+                    $statement1 = $dbh->prepare($sql);
+                    $statement1->bindParam(':patientID', $patientID, PDO::PARAM_INT);
+                    $statement1->bindParam(':signID', $signID, PDO::PARAM_INT);
+                    $vital_values = $statement1->execute();
+
+                    while($vital_values = $statement1->fetch()) { 
+                      echo "<tr>\n";
+                      echo "<td scope='row'>".$vital_values['time']."</td>\n";
+                      echo "<td>".$vital_values['value']."</td>\n";
+                      echo "<td>".$vital_values['note']."</td>\n";
+                      echo "</tr>\n";
+                    }
+                    ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <br>
+          <?php
           }
+          echo "</div>";
           echo "</div><br />";
 
           /** medicine */
@@ -129,7 +136,8 @@ echo "<body class='nav'>\n";
           $statement3->bindParam(':patientID', $patientID, PDO::PARAM_INT);
           $medicine_user = $statement3->execute();
           ?>
-          <table class="table">
+
+          <table class="table table-striped table-bordered table-sm">
             <thead>
               <tr>
                 <th scope="col">Zeit</th>
