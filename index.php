@@ -1,8 +1,10 @@
 <?php
 /**
  * This page is the main application page
- * 
+ *
  */
+ echo "<link rel='stylesheet' type='text/css' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css'>\n";
+ echo "<script type='text/javascript' src='./js.js'></script>\n";
 session_start();
 
 // First, we test if user is logged. If not, goto login.php (login page).
@@ -19,7 +21,7 @@ $patientID=0;
 if(isset($_GET['id'])){
   $patientID = (int)($_GET['id']);
 }
-    
+
 echo "<body class='nav'>\n";
 ?>
 
@@ -95,8 +97,8 @@ echo "<body class='nav'>\n";
                       <span class="mr-auto">
                         <h4><?php echo $value['sign_name'] ?></h4>
                       </span>
-                      <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal">
-                        Wert hinzufügen <i class="fas fa-plus-circle"></i> 
+                      <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#addMedicament">
+                        Wert hinzufügen <i class="fas fa-plus-circle"></i>
                       </button>
                     </nav>
                   </div>
@@ -117,7 +119,7 @@ echo "<body class='nav'>\n";
                         $statement1->bindParam(':signID', $signID, PDO::PARAM_INT);
                         $vital_values = $statement1->execute();
 
-                        while($vital_values = $statement1->fetch()) { 
+                        while($vital_values = $statement1->fetch()) {
                           echo "<tr>\n";
                           echo "<td scope='row'>".$vital_values['time']."</td>\n";
                           echo "<td>".$vital_values['value']."</td>\n";
@@ -153,7 +155,7 @@ echo "<body class='nav'>\n";
                 window.onload = function () {
 
                 var options = {
-                  animationEnabled: true,  
+                  animationEnabled: true,
                   title:{
                     text: "Temparaturverlauf"
                   },
@@ -169,7 +171,7 @@ echo "<body class='nav'>\n";
                     yValueFormatString: "##.## °C",
                     xValueFormatString: "DD.MM.YY - HH:MM",
                     type: "spline",
-                      
+
                     dataPoints: [
                       { x: new Date("2014-03-01 08:20:21"), y: 37 },
                       { x: new Date("2014-03-01 15:20:45"), y: 37.5 },
@@ -187,7 +189,7 @@ echo "<body class='nav'>\n";
                 </script>
               </div>
             </div>
-            
+
             <br>
           <?php
           }
@@ -199,7 +201,34 @@ echo "<body class='nav'>\n";
           echo "<h3>Medicine</h3>";
           echo "<hr />";
 
-          $sql = "SELECT m.time, m.quantity, me.medicament_name, m.note FROM medicine m, medicament me 
+          ?>
+          <!-- Button trigger modal -->
+              <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#addMedicament">
+                Add Medicament <i class="fas fa-plus-circle"></i>
+              </button>
+              <!-- Modal -->
+              <div class="modal fade" id="addMedicament" tabindex="-1" role="dialog" aria-labelledby="addMedicament" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      ...
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+          <?php
+          $sql = "SELECT m.time, m.quantity, me.medicament_name, m.note FROM medicine m, medicament me
           WHERE m.medicineID = me.medicamentID AND m.medicineID = :patientID";
           $statement3 = $dbh->prepare($sql);
           $statement3->bindParam(':patientID', $patientID, PDO::PARAM_INT);
@@ -208,7 +237,6 @@ echo "<body class='nav'>\n";
 
           <table class="table table-striped table-bordered table-sm">
             <thead>
-              <tr>
                 <th scope="col">Zeit</th>
                 <th scope="col">Medikament</th>
                 <th scope="col">Menge</th>
@@ -218,7 +246,7 @@ echo "<body class='nav'>\n";
 
             <tbody>
               <?php
-              while($medicine_user = $statement3->fetch()) { 
+              while($medicine_user = $statement3->fetch()) {
                 echo "<tr>\n";
                 echo "<td scope='row'>".$medicine_user['time']."</td>\n";
                 echo "<td>".$medicine_user['medicament_name']."</td>\n";
@@ -227,6 +255,7 @@ echo "<body class='nav'>\n";
                 echo "</tr>\n";
               }
               ?>
+
               </tbody>
             </table>
             <?php
@@ -238,5 +267,7 @@ echo "<body class='nav'>\n";
     </div>
   </div>
 </div>
+
+
 <br />
 <hr />
