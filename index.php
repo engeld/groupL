@@ -3,8 +3,6 @@
  * This page is the main application page
  *
  */
- echo "<link rel='stylesheet' type='text/css' href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css'>\n";
- echo "<script type='text/javascript' src='./js.js'></script>\n";
 session_start();
 
 // First, we test if user is logged. If not, goto login.php (login page).
@@ -21,7 +19,6 @@ $patientID=0;
 if(isset($_GET['id'])){
   $patientID = (int)($_GET['id']);
 }
-
 echo "<body class='nav'>\n";
 ?>
 
@@ -52,7 +49,6 @@ echo "<body class='nav'>\n";
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-3 col-lg-2">
-      <!-- normal collapsible navbar markup -->
       <h3>Patienten</h3>
        <?php
           try {
@@ -97,7 +93,7 @@ echo "<body class='nav'>\n";
                       <span class="mr-auto">
                         <h4><?php echo $value['sign_name'] ?></h4>
                       </span>
-                      <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#addMedicament">
+                      <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#addVitalsign<?php echo $value['signID'] ?>">
                         Wert hinzufügen <i class="fas fa-plus-circle"></i>
                       </button>
                     </nav>
@@ -129,27 +125,37 @@ echo "<body class='nav'>\n";
                         ?>
                       </tbody>
                     </table>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="addVitalsign<?php echo $value['signID'] ?>" tabindex="-1" role="dialog" aria-labelledby="addVitalsign<?php echo $value['signID'] ?>" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="addVitalsign<?php echo $value['signID'] ?>Label">Add <?php echo $value['sign_name'] ?></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                            
+                            <!--- @MANU: DA CHUNT S FORMULAR FUER NEUE VITALSIGN ANE --->
+
+
+
+
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                   </div>
                 </div>
               </div>
               <div class="col-6">
-                <!--
-                <canvas id="myChart" width="300" height="300"></canvas>
-                <script>
-                  new Chart(document.getElementById("myChart1"),{
-                    "type":"line",
-                    "data":{
-                      "labels":["2014-03-01 08:20:21","2014-03-01 15:20:45","2014-03-01 22:04:51","2014-03-02 08:22:27","2014-03-02 12:32:47"],
-                      "datasets": [{
-                        "label":"Temparature",
-                        "data":[37,37.5,38.2,39,38.2],
-                        "fill":false,
-                        "borderColor":"rgb(244, 66, 66)",
-                        "lineTension":0.1}]
-                      },"options":{}
-                    });
-                </script>
-              -->
                 <div id="chartContainer<?php echo $signID ?>" ></div>
                 <script>
                 window.onload = function () {
@@ -198,34 +204,40 @@ echo "<body class='nav'>\n";
 
           /** medicine */
           echo "<div id='medicine'>";
-          echo "<h3>Medicine</h3>";
-          echo "<hr />";
-
           ?>
-          <!-- Button trigger modal -->
-              <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#addMedicament">
-                Add Medicament <i class="fas fa-plus-circle"></i>
-              </button>
-              <!-- Modal -->
-              <div class="modal fade" id="addMedicament" tabindex="-1" role="dialog" aria-labelledby="addMedicament" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      ...
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="button" class="btn btn-primary">Save changes</button>
-                    </div>
-                  </div>
+
+          <nav class="navbar">
+            <span class="mr-auto">
+              <h3>Medikamente</h3>
+            </span>
+            <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#addMedicament">
+            Medikament hinzufügen <i class="fas fa-plus-circle"></i>
+            </button>
+          </nav>
+
+          <!-- Modal Medikament-->
+          <div class="modal fade" id="addMedicament" tabindex="-1" role="dialog" aria-labelledby="addMedicament" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+
+                  <!--- @MANU: DA CHUNT S FORMULAR FUER NEUE MEDIS ANE --->
+
+
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
               </div>
+            </div>
+          </div>
 
           <?php
           $sql = "SELECT m.time, m.quantity, me.medicament_name, m.note FROM medicine m, medicament me
@@ -258,6 +270,7 @@ echo "<body class='nav'>\n";
 
               </tbody>
             </table>
+
             <?php
           echo "</div>";
         } else{
