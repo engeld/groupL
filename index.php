@@ -137,11 +137,26 @@ echo "<body class='nav'>\n";
                             </button>
                           </div>
                           <div class="modal-body">
-                            
+
+
                             <!--- @MANU: DA CHUNT S FORMULAR FUER NEUE VITALSIGN ANE --->
+                            <form>
+                              <div class="form-group">
+                                <label for="date">Messdatum</label>
+                                <input type="date" id="date" />
+                                <label for="date">Messzeitpunkt</label>
+                                <input type="time" name="time">
+                              </div>
+                              <div class="form-group">
+                                <label for="vitalvalue"><?php echo $value['sign_name'] ?>-Value:</label>
+                                <input id="vitalvalue" type="number" placeholder="37.0" step="0.1" min="30" max="40">
+                              </div>
 
-
-
+                              <div class="form-group">
+                                <label for="notes">Notiz</label>
+                                <textarea class="form-control" id="notes" rows="3"></textarea>
+                              </div>
+                            </form>
 
                           </div>
                           <div class="modal-footer">
@@ -220,13 +235,13 @@ echo "<body class='nav'>\n";
             <div class="modal-dialog" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                  <h5 class="modal-title" id="addMedicamentLabel">Add Medicament</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
                 <div class="modal-body">
-
+                  @MANU
                   <!--- @MANU: DA CHUNT S FORMULAR FUER NEUE MEDIS ANE --->
 
 
