@@ -20,13 +20,15 @@ if(isset($_GET['id'])){
   $patientID = (int)($_GET['id']);
 }
 
-if(isset($_GET['mrn']) && isset($_GET['last_name']) && isset($_GET['first_name']) && isset($_GET['genderRadios'])){
+if(isset($_GET['mrn']) && isset($_GET['last_name']) && isset($_GET['first_name']) && isset($_GET['genderRadios']) && isset($_GET['birthdate']) ){
   $mrn = htmlspecialchars($_GET['mrn']);
   $last_name  = htmlspecialchars($_GET['last_name']);
   $first_name  = htmlspecialchars($_GET['first_name']);
   $gender  = htmlspecialchars($_GET['genderRadios']);
+  $birthdate  = htmlspecialchars($_GET['birthdate']);
 
-  echo  $mrn, ' ', $last_name, ' ', $first_name, ' ', $gender;
+  $sql_insert = "INSERT INTO patient (MRN, name, first_name, gender, birthdate) VALUES ('$mrn', '$last_name', '$first_name', '$gender', '$birthdate')";
+  $dbh->exec($sql_insert);
 }
 
 
@@ -100,6 +102,10 @@ echo "<body class='nav'>\n";
                       <div class="form-group">
                         <label for="first_name"><span class="glyphicon glyphicon-eye-open"></span>Firstname</label>
                         <input type="text" name="first_name" id="first_name" placeholder="Enter firstname" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label for="birthdate">Birthdate</label>
+                        <input type="date" name="birthdate" id="birthdate" class="form-control" />
                       </div>
                       <div class="form-check form-check-inline">
                         <input type="radio" name="genderRadios" id="genderRadios1" value="1" class="form-check-input">
