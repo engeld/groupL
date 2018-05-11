@@ -19,6 +19,17 @@ $patientID=0;
 if(isset($_GET['id'])){
   $patientID = (int)($_GET['id']);
 }
+
+if(isset($_GET['mrn']) && isset($_GET['last_name']) && isset($_GET['first_name']) && isset($_GET['genderRadios'])){
+  $mrn = htmlspecialchars($_GET['mrn']);
+  $last_name  = htmlspecialchars($_GET['last_name']);
+  $first_name  = htmlspecialchars($_GET['first_name']);
+  $gender  = htmlspecialchars($_GET['genderRadios']);
+
+  echo  $mrn, ' ', $last_name, ' ', $first_name, ' ', $gender;
+}
+
+
 echo "<body class='nav'>\n";
 ?>
 
@@ -75,33 +86,39 @@ echo "<body class='nav'>\n";
                 <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
-                <div class="modal-body">
-                  <form role="form">
-                    <div class="form-group">
-                      <label for="usrname"><span class="glyphicon glyphicon-user"></span> Username</label>
-                      <input type="text" class="form-control" id="usrname" placeholder="Enter email">
-                    </div>
-                    <div class="form-group">
-                      <label for="psw"><span class="glyphicon glyphicon-eye-open"></span> Password</label>
-                      <input type="text" class="form-control" id="psw" placeholder="Enter password">
-                    </div>
-                    <div class="checkbox">
-                      <label><input type="checkbox" value="" checked>Remember me</label>
-                    </div>
-                    <button type="submit" class="btn btn-default btn-success btn-block"><span class="glyphicon glyphicon-off"></span> Login</button>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-default btn-default pull-left" data-dismiss="modal"><span class="glyphicon glyphicon-remove"></span> Cancel</button>
-                  <p>Not a member? <a href="#">Sign Up</a></p>
-                  <p>Forgot <a href="#">Password?</a></p>
-                </div>
+
+                <form role="form" name="addPatientForm"">
+                  <div class="modal-body">
+                      <div class="form-group">
+                        <label for="MRN"><span class="glyphicon glyphicon-user"></span>MRN</label>
+                        <input type="number" name="mrn" id="MRN" placeholder="25000" class="form-control">
+                      </div>
+                      <div class="form-group">
+                        <label for="last_name"><span class="glyphicon glyphicon-eye-open"></span>Surname</label>
+                        <input type="text" name="last_name" id="last_name" placeholder="Enter surname" class="form-control" >
+                      </div>
+                      <div class="form-group">
+                        <label for="first_name"><span class="glyphicon glyphicon-eye-open"></span>Firstname</label>
+                        <input type="text" name="first_name" id="first_name" placeholder="Enter firstname" class="form-control">
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input type="radio" name="genderRadios" id="genderRadios1" value="1" class="form-check-input">
+                        <label for="genderRadios1" class="form-check-label">Male</label>
+                      </div>
+                      <div class="form-check form-check-inline">
+                        <input type="radio" name="genderRadios" id="genderRadios2" value="2" class="form-check-input">
+                        <label for="genderRadios2" class="form-check-label">Female</label>
+                      </div>
+                  </div>
+
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Add Patient</button>
+                  </div> 
+                </form>
               </div>
             </div>
           </div>
-
-
-
 
     </div>
 
