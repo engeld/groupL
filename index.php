@@ -120,7 +120,7 @@ echo "<body class='nav'>\n";
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Add Patient</button>
-                  </div> 
+                  </div>
                 </form>
               </div>
             </div>
@@ -289,12 +289,13 @@ echo "<body class='nav'>\n";
             <span class="mr-auto">
               <h3>Medikamente</h3>
             </span>
+
             <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#addMedicament">
             Medikament hinzufügen <i class="fas fa-plus-circle"></i>
             </button>
           </nav>
 
-          <!-- Modal Medikament-->
+
           <div class="modal fade" id="addMedicament" tabindex="-1" role="dialog" aria-labelledby="addMedicament" aria-hidden="true">
             <div class="modal-dialog" role="document">
               <div class="modal-content">
@@ -305,8 +306,73 @@ echo "<body class='nav'>\n";
                   </button>
                 </div>
                 <div class="modal-body">
-                  @MANU
+
+
+                  <table>
+                    <tr>
+                      <td>Medikament</td>
+                    <td>
+                      <select name="medikament">
+                    <?php
+                        $preps_medi ="SELECT medicament_name FROM medicament";
+                        $statement4 = $dbh->prepare($preps_medi);
+                        $statement4->bindParam(':medicament_name', $medicament_name, PDO::PARAM_INT);
+
+                        while ($row = $statement4->fetch()){
+                          ?>
+
+                          <option value="medikament"> <?php echo $row['medicament_name']; ?> </option>
+                          <?php
+                          }
+                           ?>
+
+                         </td>
+                       </tr>
+                       <tr>
+                         <td>Verschrieben von</td>
+                         <td>
+                           <select name="prescribed"
+                           <?php
+                               $preps_prescribed ="SELECT name, first_name FROM staff WHERE foctionID=2";
+                               $statement5 = $dbh->prepare($preps_prescribed);
+                               $statement5->bindParam(':name', $name, PDO::PARAM_INT);
+                               $statement5->bindParam(':first_name', $first_name, PDO::PARAM_INT);
+
+                               while ($row = $statement4->fetch()){
+                                 ?>
+
+                                 <option value="prescribed"> <?php echo $row['name']; ?> </option>
+                                 <?php
+                                 }
+                                  ?>
+                              </td>
+                      </tr>
+
+                      <tr>
+                        <td>Menge</td>
+                        <td> <input type="text" name="menge"></td>
+                     </tr>
+
+
+                      <tr>
+                        <td>Notizen</td>
+                      <td>
+                        <textarea rows="2" ></textarea>
+                      </td>
+                    </tr>
+
+
+
+
+
+
+
+
+
+
                   <!--- @MANU: DA CHUNT S FORMULAR FUER NEUE MEDIS ANE --->
+
+                  </table>
 
 
                 </div>
@@ -346,6 +412,8 @@ echo "<body class='nav'>\n";
                 echo "</tr>\n";
               }
               ?>
+
+
 
               </tbody>
             </table>
