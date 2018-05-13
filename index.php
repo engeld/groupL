@@ -20,16 +20,42 @@ if(isset($_GET['id'])){
   $patientID = (int)($_GET['id']);
 }
 
+// handling new patiens
 if(isset($_GET['mrn']) && isset($_GET['last_name']) && isset($_GET['first_name']) && isset($_GET['genderRadios']) && isset($_GET['birthdate']) ){
   $mrn = htmlspecialchars($_GET['mrn']);
-  $last_name  = htmlspecialchars($_GET['last_name']);
-  $first_name  = htmlspecialchars($_GET['first_name']);
+  $name = htmlspecialchars($_GET['last_name']);
+  $first_name = htmlspecialchars($_GET['first_name']);
   $gender  = htmlspecialchars($_GET['genderRadios']);
   $birthdate  = htmlspecialchars($_GET['birthdate']);
 
-  $sql_insert = "INSERT INTO patient (MRN, name, first_name, gender, birthdate) VALUES ('$mrn', '$last_name', '$first_name', '$gender', '$birthdate')";
-  $dbh->exec($sql_insert);
+  $stmt = $dbh->prepare("INSERT INTO patient (MRN, name, first_name, gender, birthdate) VALUES (:mrn, :name, :first_name, :gender, :birthdate)");
+  $stmt->bindParam(':mrn', $mrn);
+  $stmt->bindParam(':name', $name);
+  $stmt->bindParam(':first_name', $first_name);
+  $stmt->bindParam(':gender', $gender);
+  $stmt->bindParam(':birthdate', $birthdate);
+  $stmt->execute();
 }
+
+// handling new vital signs
+if( isset($_GET['patientID']) &&isset($_GET['signID']) &&isset($_GET['date']) && isset($_GET['time']) && isset($_GET['vitalvalue']) && isset($_GET['notes'])){
+  $patientID = htmlspecialchars($_GET['patientID']);
+  $signID = htmlspecialchars($_GET['signID']);
+  $date = htmlspecialchars($_GET['date']);
+  $time  = htmlspecialchars($_GET['time']);
+  $datetime = $date . " " .$time;
+  $vitalvalue  = htmlspecialchars($_GET['vitalvalue']);
+  $notes  = htmlspecialchars($_GET['notes']);
+
+  $stmt = $dbh->prepare("INSERT INTO vital_sign (patientID, signID, value, time, note) VALUES (:patientID, :signID, :value, :time, :note)");
+  $stmt->bindParam(':patientID', $patientID);
+  $stmt->bindParam(':signID', $signID);
+  $stmt->bindParam(':value', $vitalvalue);
+  $stmt->bindParam(':time', $datetime);
+  $stmt->bindParam(':note', $notes);
+  $stmt->execute();
+}
+
 
 
 echo "<body class='nav'>\n";
@@ -86,10 +112,13 @@ echo "<body class='nav'>\n";
               <!-- Modal content-->
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h5 class="modal-title" id="addPatientLabel">Add Patient</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
                 </div>
 
-                <form role="form" name="addPatientForm"">
+                <form role="form" name="addPatientForm">
                   <div class="modal-body">
                       <div class="form-group">
                         <label for="MRN"><span class="glyphicon glyphicon-user"></span>MRN</label>
@@ -200,33 +229,32 @@ echo "<body class='nav'>\n";
                               <span aria-hidden="true">&times;</span>
                             </button>
                           </div>
-                          <div class="modal-body">
 
+                          <form role="form" name="addVitalsigns">
+                            <div class="modal-body">
+                                <div class="form-group">
+                                  <label for="date">Measure Date</label>
+                                  <input type="date" name="date" id="date" class="form-control" />
+                                  <label for="date">Measure Time</label>
+                                  <input type="time" name="time" id="time" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                  <label for="vitalvalue"><?php echo $value['sign_name'] ?>-Value:</label>
+                                  <input name="vitalvalue" id="vitalvalue" type="number" class="form-control">
+                                </div>
 
-                            <!--- @MANU: DA CHUNT S FORMULAR FUER NEUE VITALSIGN ANE --->
-                            <form>
-                              <div class="form-group">
-                                <label for="date">Messdatum</label>
-                                <input type="date" id="date" />
-                                <label for="date">Messzeitpunkt</label>
-                                <input type="time" name="time">
-                              </div>
-                              <div class="form-group">
-                                <label for="vitalvalue"><?php echo $value['sign_name'] ?>-Value:</label>
-                                <input id="vitalvalue" type="number" placeholder="37.0" step="0.1" min="30" max="40">
-                              </div>
-
-                              <div class="form-group">
-                                <label for="notes">Notiz</label>
-                                <textarea class="form-control" id="notes" rows="3"></textarea>
-                              </div>
-                            </form>
-
-                          </div>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                          </div>
+                                <div class="form-group">
+                                  <label for="notes">Note</label>
+                                  <textarea name="notes" id="notes" rows="3" class="form-control" ></textarea>
+                                </div>
+                                <input type="hidden" name="patientID" value="<?php echo $patientID ?>">
+                                <input type="hidden" name="signID" value="<?php echo $value['signID'] ?>">
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Add Value</button>
+                            </div>
+                          </form>
                         </div>
                       </div>
                     </div>
@@ -268,7 +296,7 @@ echo "<body class='nav'>\n";
                   }]
                 };
                 $("#chartContainer1").CanvasJSChart(options);
-                $("#chartContainer2").CanvasJSChart(options);
+                //$("#chartContainer2").CanvasJSChart(options);
 
                 }
                 </script>
@@ -361,17 +389,7 @@ echo "<body class='nav'>\n";
                       </td>
                     </tr>
 
-
-
-
-
-
-
-
-
-
                   <!--- @MANU: DA CHUNT S FORMULAR FUER NEUE MEDIS ANE --->
-
                   </table>
 
 
